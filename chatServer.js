@@ -31,7 +31,8 @@ io.on('connect', function(socket) {
   socket.on('loaded', function() { // we wait until the client has loaded and contacted us that it is ready to go.
 
     socket.emit('answer', "Hello, I am Cornell Tech's admission bot.  I can help you with any questions you have about one of our programs"); //We start with the introduction;
-    setTimeout(timedQuestion, 5000, socket, "What is your name?"); // Wait a moment and respond with a question.
+    socket.emit('answer', "Which program are you interested in?  Please type the corresponding number.");
+    setTimeout(timedQuestion, 5000, socket, "1) Connective Media 2) Health Tech 3) Tech MBA 4)Computer Science 5) Electrical and Computer Engineering 6) Operations Research and Information Engineering 7)Law Technology and Entrepreneurship"); // Wait a moment and respond with a question.
 
   });
   socket.on('message', (data) => { // If we get a new message from the client we process it;
