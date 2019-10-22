@@ -31,9 +31,7 @@ io.on('connect', function(socket) {
   socket.on('loaded', function() { // we wait until the client has loaded and contacted us that it is ready to go.
 
     socket.emit('answer', "Hello, I am Cornell Tech's admission bot.  I can help you with any questions you have about one of our programs"); //We start with the introduction;
-    socket.emit('answer', "Which program are you interested in?  Please type the corresponding number.");
-    setTimeout(timedQuestion, 5000, socket, "1) Connective Media 2) Health Tech 3) Tech MBA 4)Computer Science 5) Electrical and Computer Engineering 6) Operations Research and Information Engineering 7)Law Technology and Entrepreneurship"); // Wait a moment and respond with a question.
-
+    setTimeout(timedQuestion, 5000, socket, "Would you like to hear about our programs? Please press enter"); // Wait a moment and respond with a question.
   });
   socket.on('message', (data) => { // If we get a new message from the client we process it;
     console.log(data);
@@ -49,48 +47,106 @@ function bot(data, socket, questionNum) {
   var answer;
   var question;
   var waitTime;
+  var program;
 
   /// These are the main statments that make up the conversation.
-  if (questionNum == 0) {
-    answer = 'Hello ' + input + ' :-)'; // output response
-    waitTime = 5000;
-    question = 'How old are you?'; // load next question
-  } else if (questionNum == 1) {
-    answer = 'Really, ' + input + ' years old? So that means you were born in: ' + (2018 - parseInt(input)); // output response
-    waitTime = 5000;
-    question = 'Where do you live?'; // load next question
-  } else if (questionNum == 2) {
-    answer = 'Cool! I have never been to ' + input + '.';
-    waitTime = 5000;
-    question = 'Whats your favorite color?'; // load next question
-  } else if (questionNum == 3) {
-    answer = 'Ok, ' + input + ' it is.';
-    socket.emit('changeBG', input.toLowerCase());
-    waitTime = 5000;
-    question = 'Can you still read the font?'; // load next question
-  } else if (questionNum == 4) {
-    if (input.toLowerCase() === 'yes' || input === 1) {
-      answer = 'Perfect!';
+  if (questionNum == 0){
+      answer = "Awesome! Please select which program you want to hear about"
       waitTime = 5000;
-      question = 'Whats your favorite place?';
-    } else if (input.toLowerCase() === 'no' || input === 0) {
-      socket.emit('changeFont', 'white'); /// we really should look up the inverse of what we said befor.
-      answer = ''
-      question = 'How about now?';
-      waitTime = 0;
-      questionNum--; // Here we go back in the question number this can end up in a loop
-    } else {
-      question = 'Can you still read the font?'; // load next question
-      answer = 'I did not understand you. Could you please answer "yes" or "no"?'
-      questionNum--;
-      waitTime = 5000;
+      question = "1)Connective Media 2)Health Tech 3)Tech MBA 4)Computer Science 5)Electrical and Computer Engineering 6)Operations Research and Information Engineering 7)Law Technology and Entrepreneurship";
+  }
+  else if (questionNum == 1) {
+      if (input == 1){
+        answer = "The Connective Media program is a 2 year dual masters of science degree in applied information science and information systems.  This program is a comptuer science focused curriculum centered on the ecosystems formed when communication, information and media converge"; // output response
+        waitTime = 5000;
+        question = 'Would you like to hear more?'; // load next question
     }
-    // load next question
-  } else {
-    answer = 'I have nothing more to say!'; // output response
+      else if (input == 2){
+        answer = "The Health Tech program is a 2 year masters degree program in building digital health technologies.  There is a three part curriculum with technical courses, health courses and studio courses (these are cross functional application based courses) "; // output response
+        waitTime = 5000;
+        question = 'Would you like to hear more?'; // load next question
+      }
+      else if (input == 3){
+        answer = "The Johnson Cornell Tech MBA program is a 1 year Masters in Busineess Adminstration with a focus on the tech industry.  The curriculum consists of a 3 months of intense business classes up at the Cornell Ithaca campus, and 9 months at Cornell Tech working in studio."; // output response
+        waitTime = 5000;
+        question = 'Would you like to hear more?'; // load next question
+      }
+      else if (input == 4){
+        answer = "The masters of engineering in computer science is a 1 year Masters of engineering.  You will we have a rigorous but flexbile curriculum of technical courses to use towards developing future technologies."; // output response
+        waitTime = 5000;
+        question = 'Would you like to hear more?'; // load next question
+      }
+      else if (input == 5){
+        answer = "The masters in eletrical and computer engineering is a 1 year program where students will protoypte new hardware and improve advanced algorithms.  A combination of innovative laboratory projects and rigourously taught theoretical concepts will propel students to success in the future."; // output response
+        waitTime = 5000;
+        question = 'Would you like to hear more?'; // load next question
+      }
+      else if (input == 6){
+        answer = "The ORIE program is a 1 year masters program where students will learn about the importance of data in the digital age, and teach students how to use that data to make insightful, real-time business decisions."; // output response
+        waitTime = 5000;
+        question = 'Would you like to hear more?'; // load next question
+      }
+      else if (input == 7){
+        answer = "The LLM program is a 1 year Masters of Law program where students will learn how the rapid evolution of technology is affecting existing laws, and how new regulations will need to be formulated.  Prospective students must be licensed lawyers."; // output response
+        waitTime = 5000;
+        question = 'Would you like to hear more?'; // load next question
+      }
+  } else if (questionNum == 2){
+      if (input.toLowerCase() == "yes" || input.toLowerCase() == "y"){
+        answer = "Please check out our website at https://tech.cornell.edu/ for more detailed information on all the programs" // output response
+        waitTime = 5000;
+        question = 'When do you plan on applying?'; // load next question
+  }
+      else {
+        answer = "Thats too bad!  Cornell Tech is a great place to study! Maybe you want to learn more about our other programs";
+        waitTime = 5000;
+        question = "1)Connective Media 2)Health Tech 3)Tech MBA 4)Computer Science 5)Electrical and Computer Engineering 6)Operations Research and Information Engineering 7)Law Technology and Entrepreneurship"
+        questionNum = questionNum - 2
+  }
+} else if (questionNum == 3){
+    if(input > 2022){
+      answer = "You still have a lot of time to apply!  Make sure to get you recommendations and test scores ready!"
+      waitTime = 5000;
+      question = "Where are you from?"
+  }
+    else if(input < 2019){
+      answer = "That date is in the past! Please enter a real date";
+      waitTime = 5000;
+      question = "When do you plan on applying?"
+      questionNum--
+    }
+    else{
+      answer = "You don't have much time left! Make sure to get all your materials ready ASAP"
+      waitTime = 5000;
+      question = "Where are you from"
+    }
+} else if (questionNum == 4){
+    if(input.toLowerCase() == "new york" || input.toLowerCase() == "ny" || input.toLowerCase() == "nyc" || input.toLowerCase() == "new york city" ){
+      answer = "Wow you live so close!  Come check out the campus sometime, we host tours every week"
+      waitTime = 5000;
+      question = "Did you find this bot to be helpful?"
+    }
+    else{
+      answer = "I have never heard of that place before!  But if you ever have time come checkout NYC and the beautiful campus we have";
+      waitTime = 5000;
+      question = "Did you find this bot to be helpful?"
+    }
+} else if (questionNum == 5){
+  if(input.toLowerCase() == "yes" || input.toLowerCase() == "y"){
+    answer = "Thank you, Im glad you found this helpful!"
+    waitTime = 5000;
+  }
+  else if (input.toLowerCase() == 'no' || input.toLowerCase() == 'n'){
+    answer = "Sorry :( we will continue to try to improve our bots performance"
+    waitTime = 5000;
+  }
+}
+
+else {
+    answer = 'I hope you found the information you were looking for!'; // output response
     waitTime = 0;
     question = '';
-  }
+}
 
 
   /// We take the changed data and distribute it across the required objects.
